@@ -3,6 +3,7 @@
 #include "Alert.hpp"
 #include "InputController.hpp"
 #include "FFmpegVideoDecoder.hpp"
+#include "Settings.hpp"
 #include "GLVideoRenderer.hpp"
 #ifdef __SWITCH__
 #include "AudrenAudioRenderer.hpp"
@@ -25,6 +26,13 @@ StreamWindow::StreamWindow(Widget *parent, const std::string &address, int app_i
     m_session->set_audio_renderer(new AudrenAudioRenderer());
     #else
     m_session->set_audio_renderer(new DebugFileRecorderAudioRenderer(false));
+    #endif
+
+    #ifdef __SWITCH__
+    clkrstInitialize();
+    clkrstOpenSession(&cpuSession, PcvModuleId_CpuBus, 3);
+    int clockRate = Settings::settings()->cpu_clockrate() * 1000000;
+    clkrstSetClockRate(&cpuSession, clockRate);
     #endif
     
     m_loader = add<LoadingOverlay>("Starting...");
@@ -157,6 +165,11 @@ void StreamWindow::terminate(bool close_app) {
     }
     
     m_session->stop(close_app);
+
+    #ifdef __SWITCH__
+    clkrstCloseSession(&cpuSession);
+    clkrstExit();
+    #endif
     
     if (auto app = dynamic_cast<Application *>(screen())) {
         app->pop_window();

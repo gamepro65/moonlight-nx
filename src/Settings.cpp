@@ -140,6 +140,12 @@ void Settings::load() {
                 }
             }
             
+            if (json_t* cpu_clockrate = json_object_get(settings, "cpu_clockrate")) {
+                if (json_typeof(cpu_clockrate) == JSON_INTEGER) {
+                    m_cpu_clockrate = (int)json_integer_value(cpu_clockrate);
+                }
+            }
+
             if (json_t* sops = json_object_get(settings, "sops")) {
                 m_sops = json_typeof(sops) == JSON_TRUE;
             }
@@ -180,6 +186,7 @@ void Settings::save() {
             json_object_set(settings, "bitrate", json_integer(m_bitrate));
             json_object_set(settings, "ignore_unsupported_resolutions", m_ignore_unsupported_resolutions ? json_true() : json_false());
             json_object_set(settings, "decoder_threads", json_integer(m_decoder_threads));
+            json_object_set(settings, "cpu_clockrate", json_integer(m_cpu_clockrate));
             json_object_set(settings, "click_by_tap", m_click_by_tap ? json_true() : json_false());
             json_object_set(settings, "sops", m_sops ? json_true() : json_false());
             json_object_set(settings, "play_audio", m_play_audio ? json_true() : json_false());

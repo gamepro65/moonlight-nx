@@ -146,7 +146,38 @@ SettingsWindow::SettingsWindow(nanogui::Widget* parent): ContentWindow(parent, "
         GET_SETTINGS(decoder_threads_combo_box, 4, 3);
         DEFAULT;
     }
-    
+
+    right_container->add<Label>("CPU Overclock");
+    std::vector<std::string> overclock_values = { "1020mhz (default)", "1122mhz", "1224mhz", "1326mhz", "1428mhz", "1581mhz", "1683mhz", "1785mhz" };
+    auto overclock_combo_box = right_container->add<ComboBox>(overclock_values);
+    overclock_combo_box->set_fixed_width(component_width);
+    overclock_combo_box->popup()->set_fixed_width(component_width);
+    overclock_combo_box->set_callback([](auto value) {
+        switch (value) {
+            SET_SETTING(0, set_cpu_clockrate(1020));
+            SET_SETTING(1, set_cpu_clockrate(1122));
+            SET_SETTING(2, set_cpu_clockrate(1224));
+            SET_SETTING(3, set_cpu_clockrate(1326));
+            SET_SETTING(4, set_cpu_clockrate(1428));
+            SET_SETTING(5, set_cpu_clockrate(1581));
+            SET_SETTING(6, set_cpu_clockrate(1683));
+            SET_SETTING(7, set_cpu_clockrate(1785));
+            DEFAULT;
+        }
+    });
+
+    switch (Settings::settings()->cpu_clockrate()) {
+        GET_SETTINGS(overclock_combo_box, 1020, 0);
+        GET_SETTINGS(overclock_combo_box, 1122, 1);
+        GET_SETTINGS(overclock_combo_box, 1224, 2);
+        GET_SETTINGS(overclock_combo_box, 1326, 3);
+        GET_SETTINGS(overclock_combo_box, 1428, 4);
+        GET_SETTINGS(overclock_combo_box, 1581, 5);
+        GET_SETTINGS(overclock_combo_box, 1683, 6);
+        GET_SETTINGS(overclock_combo_box, 1785, 7);
+        DEFAULT;
+    }
+
     right_container->add<Label>("Stream Settings");
     auto sops = right_container->add<CheckBox>("Use Streaming Optimal Playable Settings");
     sops->set_checked(Settings::settings()->sops());

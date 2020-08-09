@@ -2,6 +2,7 @@
 #include "GameStreamClient.hpp"
 #include "LoadingOverlay.hpp"
 #include "MoonlightSession.hpp"
+#include <switch.h>
 #pragma once
 
 class StreamWindow: public nanogui::Widget {
@@ -18,6 +19,7 @@ public:
     
 private:
     MoonlightSession* m_session;
+    ClkrstSession cpuSession;
     LoadingOverlay* m_loader;
     bool m_draw_stats = false;
 };

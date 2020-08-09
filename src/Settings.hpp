@@ -125,6 +125,14 @@ public:
     bool write_log() const {
         return m_write_log;
     }
+
+    void set_cpu_clockrate(int cpu_clockrate) {
+        m_cpu_clockrate = cpu_clockrate;
+    }
+
+    int cpu_clockrate() const {
+        return m_cpu_clockrate;
+    }
     
     void load();
     void save();
@@ -143,6 +151,7 @@ private:
     int m_fps = 60;
     VideoCodec m_video_codec = H264;
     int m_bitrate = 10000;
+    int m_cpu_clockrate = 1020;
     bool m_ignore_unsupported_resolutions = false;
     bool m_click_by_tap = false;
     int m_decoder_threads = 4;
